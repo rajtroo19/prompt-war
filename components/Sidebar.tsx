@@ -95,13 +95,18 @@ export function Sidebar() {
 
       {/* Overlay for mobile */}
       {mobileOpen && (
-        <div
+        <button
+          type="button"
           onClick={() => setMobileOpen(false)}
+          aria-label="Close sidebar overlay"
           style={{
             position: 'fixed',
             inset: 0,
             background: 'rgba(0,0,0,0.2)',
             zIndex: 199,
+            border: 'none',
+            width: '100%',
+            height: '100%',
           }}
         />
       )}

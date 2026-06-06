@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EXAM_OPTIONS } from '@/lib/constants';
 import { createDefaultProfile, saveUserProfile } from '@/lib/storage';
@@ -47,7 +48,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           {step === 0 && (
             <motion.div key="welcome" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} style={{ textAlign: 'center' }}>
               <div style={{ marginBottom: '1.5rem' }}>
-                <img src="/MindPrep.png" alt="MindPrep Logo" width={80} height={80} style={{ borderRadius: '16px', display: 'inline-block' }} />
+                <Image src="/MindPrep.png" alt="MindPrep Logo" width={80} height={80} style={{ borderRadius: '16px', display: 'inline-block' }} priority />
               </div>
               <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', fontWeight: 800, marginBottom: '1rem', background: 'linear-gradient(135deg, #10B981, #059669)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Welcome to MindPrep
@@ -69,17 +70,17 @@ export function Onboarding({ onComplete }: OnboardingProps) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
                 {!isLogin && (
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Full Name</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" className="input" autoFocus />
+                    <label htmlFor="auth-name" style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Full Name</label>
+                    <input id="auth-name" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" className="input" />
                   </div>
                 )}
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Email Address</label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="student@example.com" className="input" />
+                  <label htmlFor="auth-email" style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Email Address</label>
+                  <input id="auth-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="student@example.com" className="input" />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Password</label>
-                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="input" />
+                  <label htmlFor="auth-password" style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Password</label>
+                  <input id="auth-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="input" />
                 </div>
               </div>
 

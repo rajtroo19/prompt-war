@@ -153,13 +153,15 @@ export function HeatmapCalendar() {
             }}
           >
             {week.map((cell, dayIndex) => (
-              <div
+              <button
+                type="button"
                 key={`${weekIndex}-${dayIndex}`}
                 className="heatmap-cell"
                 style={{
                   backgroundColor: cell.mood >= 0 ? MOOD_COLORS[cell.mood] : 'transparent',
                   border: cell.mood === 0 ? '1px solid #E2E8F0' : 'none',
                   cursor: cell.date ? 'pointer' : 'default',
+                  padding: 0,
                 }}
                 aria-label={
                   cell.date
@@ -180,6 +182,20 @@ export function HeatmapCalendar() {
                   }
                 }}
                 onMouseLeave={() => setTooltip(null)}
+                onFocus={(e) => {
+                  if (cell.date && cell.mood > 0) {
+                    const rect = (e.target as HTMLElement).getBoundingClientRect();
+                    setTooltip({
+                      show: true,
+                      x: rect.left + rect.width / 2,
+                      y: rect.top - 10,
+                      date: cell.date,
+                      mood: cell.mood,
+                      triggers: cell.triggers,
+                    });
+                  }
+                }}
+                onBlur={() => setTooltip(null)}
               />
             ))}
           </div>

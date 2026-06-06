@@ -56,14 +56,14 @@ export default function ProfilePage() {
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="card">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.9rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Full Name</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" className="input" />
+            <label htmlFor="profile-name" style={{ display: 'block', fontSize: '0.9rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Full Name</label>
+            <input id="profile-name" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" className="input" />
           </div>
 
           <div>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>
               <GraduationCap size={16} /> Target Exam
-            </label>
+            </span>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.5rem' }}>
               {EXAM_OPTIONS.map((exam) => (
                 <button 
@@ -80,8 +80,8 @@ export default function ProfilePage() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.9rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Exam Date (optional)</label>
-            <input type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)} className="input" />
+            <label htmlFor="profile-exam-date" style={{ display: 'block', fontSize: '0.9rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Exam Date (optional)</label>
+            <input id="profile-exam-date" type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)} className="input" />
           </div>
 
           <button 

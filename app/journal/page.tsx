@@ -57,7 +57,7 @@ export default function JournalPage() {
               <button onClick={() => setShowForm(false)} style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', padding: '0.25rem' }} aria-label="Close form"><X size={20} /></button>
             </div>
             <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem' }}>How are you feeling? (optional)</label>
+              <span style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem' }}>How are you feeling? (optional)</span>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 {MOOD_CONFIG.map((m) => (
                   <button key={m.score} onClick={() => setMood(mood === m.score ? undefined : m.score)} style={{ fontSize: '1.5rem', background: mood === m.score ? `${m.color}15` : 'transparent', border: `2px solid ${mood === m.score ? m.color : '#E2E8F0'}`, borderRadius: '8px', padding: '0.375rem 0.5rem', cursor: 'pointer', transition: 'all 0.2s ease' }} aria-label={m.label} aria-pressed={mood === m.score}>

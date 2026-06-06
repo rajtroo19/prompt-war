@@ -35,7 +35,6 @@ export function MoodSelector({ selected, onSelect }: MoodSelectorProps) {
             role="radio"
             aria-checked={isSelected}
             aria-label={`${mood.label} mood - ${mood.emoji}`}
-            aria-pressed={isSelected}
             className={`mood-option ${isSelected ? 'selected' : ''}`}
             style={{
               borderColor: isSelected ? mood.color : '#E2E8F0',

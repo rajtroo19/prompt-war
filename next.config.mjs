@@ -5,8 +5,6 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
-  eslint: { ignoreDuringBuild: true },
-  typescript: { ignoreBuildErrors: true },
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
