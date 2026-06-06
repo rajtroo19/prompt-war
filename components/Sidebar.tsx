@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   Home,
@@ -58,7 +59,7 @@ export function Sidebar() {
             color: '#1E293B',
           }}
         >
-          <span style={{ fontSize: '1.5rem' }}>🧘</span>
+          <Image src="/MindPrep.png" alt="MindPrep Logo" width={32} height={32} style={{ borderRadius: '6px' }} />
           <span
             style={{
               fontFamily: 'var(--font-heading)',
@@ -130,7 +131,7 @@ export function Sidebar() {
             padding: '0.5rem',
           }}
         >
-          <span style={{ fontSize: '2rem' }}>🧘</span>
+          <Image src="/MindPrep.png" alt="MindPrep — Mental Wellness for Exam Warriors" width={44} height={44} style={{ borderRadius: '8px' }} />
           <div>
             <h1
               style={{
@@ -153,7 +154,7 @@ export function Sidebar() {
                 marginTop: '2px',
               }}
             >
-              YOUR WELLNESS COMPANION
+              TRACK · REFLECT · THRIVE
             </p>
           </div>
         </Link>

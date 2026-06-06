@@ -7,10 +7,101 @@ import { getAllMoodEntries, getEntriesLast7Days, getEntriesLastNDays, getAverage
 import { StreakBadge } from '@/components/StreakBadge';
 import { MOOD_CONFIG, STRESS_TRIGGERS } from '@/lib/constants';
 import { MoodEntry, UserProfile } from '@/lib/types';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 const HeatmapCalendar = dynamic(() => import('@/components/HeatmapCalendar').then((m) => m.HeatmapCalendar), { ssr: false });
 const MoodChart = dynamic(() => import('@/components/MoodChart').then((m) => m.MoodChart), { ssr: false });
+
+/* ─── Lightweight Custom SVG Charts ─────────────────── */
+
+function BarChartSVG({ data, horizontal = false }: { data: { name: string; value: number; color?: string }[]; horizontal?: boolean }) {
+  const maxVal = Math.max(...data.map((d) => d.value), 1);
+
+  if (horizontal) {
+    const barH = 24;
+    const gap = 8;
+    const h = data.length * (barH + gap);
+    return (
+      <div style={{ width: '100%' }} role="img" aria-label="Horizontal bar chart">
+        {data.map((d, i) => (
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: `${gap}px` }}>
+            <span style={{ width: '90px', fontSize: '0.75rem', color: '#475569', textAlign: 'right', flexShrink: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.name}</span>
+            <div style={{ flex: 1, height: `${barH}px`, background: '#F0F4F8', borderRadius: '4px', overflow: 'hidden', position: 'relative' }}>
+              <motion.div initial={{ width: 0 }} animate={{ width: `${(d.value / maxVal) * 100}%` }} transition={{ duration: 0.8, delay: i * 0.1 }} style={{ height: '100%', background: d.color ?? '#EF4444', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '6px' }}>
+                <span style={{ fontSize: '0.7rem', color: '#fff', fontWeight: 600 }}>{d.value}</span>
+              </motion.div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Vertical bars
+  const barW = 100 / data.length;
+  return (
+    <div style={{ width: '100%', height: '180px', display: 'flex', alignItems: 'flex-end', gap: '4px', padding: '0 4px' }} role="img" aria-label="Vertical bar chart">
+      {data.map((d, i) => (
+        <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+          <span style={{ fontSize: '0.65rem', color: '#64748B' }}>{d.value > 0 ? d.value.toFixed(1) : ''}</span>
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: `${d.value > 0 ? Math.max((d.value / 5) * 120, 8) : 4}px` }}
+            transition={{ duration: 0.6, delay: i * 0.08 }}
+            style={{ width: '100%', maxWidth: '32px', background: d.color ?? '#E2E8F0', borderRadius: '4px 4px 0 0', minHeight: '4px' }}
+          />
+          <span style={{ fontSize: '0.65rem', color: '#94A3B8' }}>{d.name}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PieChartSVG({ data }: { data: { name: string; value: number; color: string }[] }) {
+  const total = data.reduce((s, d) => s + d.value, 0);
+  if (total === 0) return <p style={{ color: '#94A3B8', textAlign: 'center' }}>No data yet</p>;
+
+  const size = 160;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = 60;
+  const ir = 38;
+  let cumAngle = -90;
+
+  const slices = data.filter((d) => d.value > 0).map((d) => {
+    const angle = (d.value / total) * 360;
+    const startAngle = cumAngle;
+    cumAngle += angle;
+    const endAngle = cumAngle;
+    const startRad = (startAngle * Math.PI) / 180;
+    const endRad = (endAngle * Math.PI) / 180;
+    const largeArc = angle > 180 ? 1 : 0;
+    const outerPath = `M ${cx + r * Math.cos(startRad)} ${cy + r * Math.sin(startRad)} A ${r} ${r} 0 ${largeArc} 1 ${cx + r * Math.cos(endRad)} ${cy + r * Math.sin(endRad)} L ${cx + ir * Math.cos(endRad)} ${cy + ir * Math.sin(endRad)} A ${ir} ${ir} 0 ${largeArc} 0 ${cx + ir * Math.cos(startRad)} ${cy + ir * Math.sin(startRad)} Z`;
+    return { ...d, path: outerPath };
+  });
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }} role="img" aria-label="Mood distribution donut chart">
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        {slices.map((s, i) => (
+          <path key={i} d={s.path} fill={s.color} stroke="#FFFFFF" strokeWidth="2">
+            <title>{`${s.name}: ${s.value}`}</title>
+          </path>
+        ))}
+        <text x={cx} y={cy - 4} textAnchor="middle" fill="#1E293B" fontSize="18" fontWeight="700">{total}</text>
+        <text x={cx} y={cy + 10} textAnchor="middle" fill="#94A3B8" fontSize="7">total</text>
+      </svg>
+      <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+        {data.filter((d) => d.value > 0).map((d) => (
+          <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: '#64748B' }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: d.color }} />{d.name}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Main Page ─────────────────────────────────────── */
 
 export default function InsightsPage() {
   const [allEntries, setAllEntries] = useState<MoodEntry[]>([]);
@@ -39,8 +130,6 @@ export default function InsightsPage() {
     if (topTriggers.length > 0) { const t = STRESS_TRIGGERS.find((s) => s.value === topTriggers[0].trigger); if (t) insights.push(`"${t.label}" is your most frequent stress trigger (${topTriggers[0].count} times). Identifying patterns is the first step to managing them. 💪`); }
     return insights.length > 0 ? insights : ["Keep checking in daily to unlock personalized insights! We're building your wellness picture. 📊"];
   };
-
-  const tooltipStyle = { background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '8px', color: '#1E293B', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' };
 
   if (!isLoaded) return <div className="page-container"><div className="skeleton" style={{ height: '500px' }} /></div>;
 
@@ -105,59 +194,33 @@ export default function InsightsPage() {
             {topTriggers.length > 0 && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="card">
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: '#1E293B' }}>🎯 Top Stress Triggers</h2>
-                <div style={{ width: '100%', height: 200 }} aria-describedby="triggers-desc">
-                  <span id="triggers-desc" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden' }}>Bar chart showing top stress triggers</span>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={topTriggers.map((t) => ({ name: STRESS_TRIGGERS.find((s) => s.value === t.trigger)?.label ?? t.trigger, count: t.count }))} layout="vertical" margin={{ top: 0, right: 10, left: 80, bottom: 0 }}>
-                      <XAxis type="number" tick={{ fill: '#94A3B8', fontSize: 12 }} axisLine={{ stroke: '#E2E8F0' }} />
-                      <YAxis type="category" dataKey="name" tick={{ fill: '#475569', fontSize: 11 }} axisLine={false} tickLine={false} width={80} />
-                      <Tooltip contentStyle={tooltipStyle} />
-                      <Bar dataKey="count" fill="#EF4444" radius={[0, 4, 4, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
+                <BarChartSVG
+                  horizontal
+                  data={topTriggers.map((t) => ({
+                    name: STRESS_TRIGGERS.find((s) => s.value === t.trigger)?.label ?? t.trigger,
+                    value: t.count,
+                    color: '#EF4444',
+                  }))}
+                />
               </motion.div>
             )}
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="card">
               <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: '#1E293B' }}>🎨 Mood Distribution</h2>
-              <div style={{ width: '100%', height: 200 }} aria-describedby="mood-dist-desc">
-                <span id="mood-dist-desc" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden' }}>Pie chart showing mood distribution</span>
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie data={moodDist.filter((d) => d.count > 0)} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3} dataKey="count">
-                      {moodDist.filter((d) => d.count > 0).map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
-                    </Pie>
-                    <Tooltip contentStyle={tooltipStyle} formatter={(value: number, name: string) => [value, name]} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '0.5rem' }}>
-                {moodDist.filter((d) => d.count > 0).map((d) => (
-                  <div key={d.mood} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: '#64748B' }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: d.color }} />{d.mood}
-                  </div>
-                ))}
-              </div>
+              <PieChartSVG data={moodDist.map((d) => ({ name: d.mood, value: d.count, color: d.color }))} />
             </motion.div>
           </div>
 
           {/* Mood by Day */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="card" style={{ marginBottom: '1.5rem' }}>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: '#1E293B' }}>📅 Average Mood by Day</h2>
-            <div style={{ width: '100%', height: 200 }} aria-describedby="day-mood-desc">
-              <span id="day-mood-desc" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden' }}>Bar chart showing average mood by day of week</span>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={moodByDay} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-                  <XAxis dataKey="day" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={{ stroke: '#E2E8F0' }} tickLine={false} />
-                  <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fill: '#94A3B8', fontSize: 12 }} axisLine={{ stroke: '#E2E8F0' }} tickLine={false} />
-                  <Tooltip contentStyle={tooltipStyle} formatter={(value: number) => [value.toFixed(1), 'Avg Mood']} />
-                  <Bar dataKey="avgMood" radius={[4, 4, 0, 0]}>
-                    {moodByDay.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.avgMood >= 4 ? '#10B981' : entry.avgMood >= 3 ? '#EAB308' : entry.avgMood >= 2 ? '#F97316' : entry.avgMood > 0 ? '#EF4444' : '#E2E8F0'} />)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            <BarChartSVG
+              data={moodByDay.map((d) => ({
+                name: d.day,
+                value: d.avgMood,
+                color: d.avgMood >= 4 ? '#10B981' : d.avgMood >= 3 ? '#EAB308' : d.avgMood >= 2 ? '#F97316' : d.avgMood > 0 ? '#EF4444' : '#E2E8F0',
+              }))}
+            />
           </motion.div>
 
           {/* Streak & Badges */}
