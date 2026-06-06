@@ -3,12 +3,15 @@ import type { Config } from 'jest';
 const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', { tsconfig: { jsx: 'react-jsx' } }],
+  },
   roots: ['<rootDir>/__tests__'],
   testPathIgnorePatterns: ['/node_modules/', 'setup\\.ts$'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
-  setupFiles: ['<rootDir>/__tests__/setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
   coverageThreshold: {
     global: {
       branches: 60,

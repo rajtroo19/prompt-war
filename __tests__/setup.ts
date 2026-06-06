@@ -12,3 +12,21 @@ const localStorageMock = (() => {
 })();
 
 Object.defineProperty(global, 'localStorage', { value: localStorageMock });
+
+import '@testing-library/jest-dom';
+import React from 'react';
+
+jest.mock('framer-motion', () => {
+  const actual = jest.requireActual('framer-motion');
+  return {
+    __esModule: true,
+    ...actual,
+    AnimatePresence: ({ children }: any) => children,
+    motion: {
+      ...actual.motion,
+      div: React.forwardRef(({ initial, animate, exit, transition, whileHover, ...props }: any, ref: any) => 
+        React.createElement('div', { ref, ...props })
+      ),
+    },
+  };
+});

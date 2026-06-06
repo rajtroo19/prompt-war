@@ -12,6 +12,7 @@ import {
   Bot,
   Menu,
   X,
+  LogOut,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -27,6 +28,11 @@ const navItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem('mindprep_user_profile');
+    window.location.href = '/';
+  };
 
   return (
     <>
@@ -179,6 +185,17 @@ export function Sidebar() {
             );
           })}
         </nav>
+
+        <div style={{ marginTop: 'auto', padding: '0 0.5rem' }}>
+          <button
+            onClick={handleLogout}
+            className="nav-item"
+            style={{ width: '100%', border: 'none', background: 'transparent', color: '#EF4444', cursor: 'pointer' }}
+          >
+            <LogOut size={20} />
+            <span>Log Out</span>
+          </button>
+        </div>
 
         {/* Footer */}
         <div

@@ -13,12 +13,28 @@ interface OnboardingProps {
 
 export function Onboarding({ onComplete }: OnboardingProps) {
   const [step, setStep] = useState(0);
+  const [isLogin, setIsLogin] = useState(false);
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [targetExam, setTargetExam] = useState<TargetExam | ''>('');
   const [examDate, setExamDate] = useState('');
 
-  const handleSubmit = () => {
-    if (!name.trim() || !targetExam) return;
+  const handleAuth = () => {
+    if (!email || !password) return;
+    if (isLogin) {
+      // Simulate Login
+      const profile = createDefaultProfile('Warrior', 'NEET', undefined);
+      saveUserProfile(profile);
+      onComplete();
+    } else {
+      if (!name) return;
+      setStep(2);
+    }
+  };
+
+  const handleSetupComplete = () => {
+    if (!targetExam) return;
     const profile = createDefaultProfile(name.trim(), targetExam as TargetExam, examDate || undefined);
     saveUserProfile(profile);
     onComplete();
@@ -30,12 +46,14 @@ export function Onboarding({ onComplete }: OnboardingProps) {
         <AnimatePresence mode="wait">
           {step === 0 && (
             <motion.div key="welcome" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>🧘</div>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <img src="/MindPrep.png" alt="MindPrep Logo" width={80} height={80} style={{ borderRadius: '16px', display: 'inline-block' }} />
+              </div>
               <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', fontWeight: 800, marginBottom: '1rem', background: 'linear-gradient(135deg, #10B981, #059669)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Welcome to MindPrep
               </h1>
               <p style={{ color: '#64748B', fontSize: '1.1rem', lineHeight: 1.6, marginBottom: '2rem', maxWidth: '400px', margin: '0 auto 2rem' }}>
-                Your mental wellness companion for exam preparation. Track your moods, manage stress, and stay balanced on your journey to success.
+                Your mental wellness companion for exam preparation. Track your moods, manage stress, and stay balanced.
               </p>
               <button className="btn-primary" onClick={() => setStep(1)} style={{ fontSize: '1.1rem', padding: '1rem 2rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                 Get Started <ArrowRight size={20} />
@@ -44,17 +62,40 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           )}
 
           {step === 1 && (
-            <motion.div key="name" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} className="card-gradient">
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1E293B' }}>What&apos;s your name? 👋</h2>
-              <p style={{ color: '#64748B', marginBottom: '1.5rem', fontSize: '0.9rem' }}>We&apos;ll use this to personalize your experience.</p>
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" className="input" aria-label="Your name" autoFocus onKeyDown={(e) => { if (e.key === 'Enter' && name.trim()) setStep(2); }} style={{ marginBottom: '1.5rem' }} />
-              <button className="btn-primary" onClick={() => setStep(2)} disabled={!name.trim()} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                Continue <ArrowRight size={18} />
+            <motion.div key="auth" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} className="card-gradient">
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1E293B' }}>{isLogin ? 'Welcome Back 👋' : 'Create Account'}</h2>
+              <p style={{ color: '#64748B', marginBottom: '1.5rem', fontSize: '0.9rem' }}>{isLogin ? 'Sign in to access your wellness dashboard.' : 'Sign up to personalize your wellness journey.'}</p>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+                {!isLogin && (
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Full Name</label>
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" className="input" autoFocus />
+                  </div>
+                )}
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Email Address</label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="student@example.com" className="input" />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Password</label>
+                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="input" />
+                </div>
+              </div>
+
+              <button className="btn-primary" onClick={handleAuth} disabled={!email || !password || (!isLogin && !name)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                {isLogin ? 'Log In' : 'Continue'} <ArrowRight size={18} />
               </button>
+
+              <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                <button onClick={() => setIsLogin(!isLogin)} style={{ background: 'none', border: 'none', color: '#10B981', fontSize: '0.9rem', cursor: 'pointer', fontWeight: 600 }}>
+                  {isLogin ? 'Need an account? Sign up' : 'Already have an account? Log in'}
+                </button>
+              </div>
             </motion.div>
           )}
 
-          {step === 2 && (
+          {step === 2 && !isLogin && (
             <motion.div key="exam" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} className="card-gradient">
               <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1E293B' }}>
                 <GraduationCap size={24} style={{ display: 'inline', marginRight: '0.5rem', verticalAlign: 'middle' }} />
@@ -70,10 +111,10 @@ export function Onboarding({ onComplete }: OnboardingProps) {
                 ))}
               </div>
               <div style={{ marginBottom: '1.5rem' }}>
-                <label htmlFor="exam-date" style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem' }}>Exam date (optional)</label>
+                <label htmlFor="exam-date" style={{ display: 'block', fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem', fontWeight: 600 }}>Exam date (optional)</label>
                 <input id="exam-date" type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)} className="input" />
               </div>
-              <button className="btn-primary" onClick={handleSubmit} disabled={!targetExam} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+              <button className="btn-primary" onClick={handleSetupComplete} disabled={!targetExam} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                 Start My Wellness Journey 🚀
               </button>
             </motion.div>
