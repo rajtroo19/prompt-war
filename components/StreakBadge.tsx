@@ -12,15 +12,11 @@ interface StreakBadgeProps {
 export function StreakBadge({ streak, badges }: StreakBadgeProps) {
   return (
     <div>
-      {/* Streak Display */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         className="card-gradient"
-        style={{
-          textAlign: 'center',
-          marginBottom: '1.5rem',
-        }}
+        style={{ textAlign: 'center', marginBottom: '1.5rem' }}
       >
         <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>
           {streak > 0 ? '🔥' : '✨'}
@@ -31,20 +27,19 @@ export function StreakBadge({ streak, badges }: StreakBadgeProps) {
             fontSize: '2.5rem',
             fontWeight: 800,
             background: streak > 0
-              ? 'linear-gradient(135deg, #FCD34D, #F97316)'
-              : 'linear-gradient(135deg, #94A3B8, #64748B)',
+              ? 'linear-gradient(135deg, #D97706, #F59E0B)'
+              : 'linear-gradient(135deg, #94A3B8, #CBD5E1)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}
         >
           {streak}
         </div>
-        <div style={{ color: '#94A3B8', fontSize: '0.9rem' }}>
+        <div style={{ color: '#64748B', fontSize: '0.9rem' }}>
           {streak === 1 ? 'day streak' : 'days streak'}
         </div>
       </motion.div>
 
-      {/* Badges Grid */}
       <div
         style={{
           display: 'grid',
@@ -64,13 +59,13 @@ export function StreakBadge({ streak, badges }: StreakBadgeProps) {
               aria-label={`Badge: ${def.name} — ${def.description} ${earned ? '(unlocked)' : '(locked)'}`}
             >
               <span style={{ fontSize: '2rem' }}>
-                {earned ? def.emoji : <Lock size={24} style={{ color: '#64748B' }} />}
+                {earned ? def.emoji : <Lock size={24} style={{ color: '#CBD5E1' }} />}
               </span>
               <span
                 style={{
                   fontSize: '0.75rem',
                   fontWeight: 600,
-                  color: earned ? '#6EE7B7' : '#64748B',
+                  color: earned ? '#059669' : '#94A3B8',
                 }}
               >
                 {def.name}
@@ -78,7 +73,7 @@ export function StreakBadge({ streak, badges }: StreakBadgeProps) {
               <span
                 style={{
                   fontSize: '0.65rem',
-                  color: '#64748B',
+                  color: '#94A3B8',
                   lineHeight: 1.3,
                 }}
               >

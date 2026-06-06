@@ -38,21 +38,21 @@ export function MoodSelector({ selected, onSelect }: MoodSelectorProps) {
             aria-pressed={isSelected}
             className={`mood-option ${isSelected ? 'selected' : ''}`}
             style={{
-              borderColor: isSelected ? mood.color : '#2D3148',
+              borderColor: isSelected ? mood.color : '#E2E8F0',
               background: isSelected
-                ? `linear-gradient(135deg, ${mood.color}15, ${mood.color}08)`
-                : '#252940',
-              boxShadow: isSelected ? `0 0 25px ${mood.color}20` : 'none',
+                ? `linear-gradient(135deg, ${mood.color}18, ${mood.color}08)`
+                : '#FFFFFF',
+              boxShadow: isSelected ? `0 4px 20px ${mood.color}25` : '0 1px 3px rgba(0,0,0,0.05)',
             }}
           >
-            <span className="emoji" style={{ filter: isSelected ? 'none' : 'saturate(0.5)' }}>
+            <span className="emoji" style={{ filter: isSelected ? 'none' : 'saturate(0.6)' }}>
               {mood.emoji}
             </span>
             <span
               style={{
                 fontSize: '0.8rem',
                 fontWeight: isSelected ? 600 : 400,
-                color: isSelected ? mood.color : '#94A3B8',
+                color: isSelected ? mood.color : '#64748B',
               }}
             >
               {mood.label}

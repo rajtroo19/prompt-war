@@ -6,12 +6,12 @@ import { MONTHS, DAYS_OF_WEEK } from '@/lib/constants';
 import { STRESS_TRIGGERS } from '@/lib/constants';
 
 const MOOD_COLORS: Record<number, string> = {
-  0: '#1A1D2E',
-  1: '#991B1B',
-  2: '#C2410C',
-  3: '#A16207',
-  4: '#166534',
-  5: '#059669',
+  0: '#F0F4F8',
+  1: '#FCA5A5',
+  2: '#FDBA74',
+  3: '#FDE047',
+  4: '#86EFAC',
+  5: '#6EE7B7',
 };
 
 export function HeatmapCalendar() {
@@ -43,11 +43,9 @@ export function HeatmapCalendar() {
     return result;
   }, []);
 
-  // Group into weeks (columns)
   const weeks: typeof cells[] = [];
   let currentWeek: typeof cells = [];
 
-  // Pad the first week
   const firstDate = new Date(cells[0].date + 'T00:00:00');
   const firstDay = firstDate.getDay();
   for (let i = 0; i < firstDay; i++) {
@@ -65,7 +63,6 @@ export function HeatmapCalendar() {
     weeks.push(currentWeek);
   }
 
-  // Get month labels
   const monthLabels: { label: string; col: number }[] = [];
   let lastMonth = -1;
   weeks.forEach((week, weekIndex) => {
@@ -87,7 +84,6 @@ export function HeatmapCalendar() {
 
   return (
     <div style={{ position: 'relative' }}>
-      {/* Month Labels */}
       <div
         style={{
           display: 'flex',
@@ -104,7 +100,7 @@ export function HeatmapCalendar() {
               left: `${32 + m.col * 18}px`,
               top: 0,
               fontSize: '0.7rem',
-              color: '#64748B',
+              color: '#94A3B8',
             }}
           >
             {m.label}
@@ -121,7 +117,6 @@ export function HeatmapCalendar() {
           paddingBottom: '0.5rem',
         }}
       >
-        {/* Day labels */}
         <div
           style={{
             display: 'flex',
@@ -137,7 +132,7 @@ export function HeatmapCalendar() {
               style={{
                 height: '14px',
                 fontSize: '0.6rem',
-                color: '#64748B',
+                color: '#94A3B8',
                 display: 'flex',
                 alignItems: 'center',
                 visibility: i % 2 === 1 ? 'visible' : 'hidden',
@@ -148,7 +143,6 @@ export function HeatmapCalendar() {
           ))}
         </div>
 
-        {/* Grid */}
         {weeks.map((week, weekIndex) => (
           <div
             key={weekIndex}
@@ -164,6 +158,7 @@ export function HeatmapCalendar() {
                 className="heatmap-cell"
                 style={{
                   backgroundColor: cell.mood >= 0 ? MOOD_COLORS[cell.mood] : 'transparent',
+                  border: cell.mood === 0 ? '1px solid #E2E8F0' : 'none',
                   cursor: cell.date ? 'pointer' : 'default',
                 }}
                 aria-label={
@@ -191,7 +186,6 @@ export function HeatmapCalendar() {
         ))}
       </div>
 
-      {/* Legend */}
       <div
         style={{
           display: 'flex',
@@ -201,7 +195,7 @@ export function HeatmapCalendar() {
           justifyContent: 'flex-end',
         }}
       >
-        <span style={{ fontSize: '0.7rem', color: '#64748B' }}>Less</span>
+        <span style={{ fontSize: '0.7rem', color: '#94A3B8' }}>Less</span>
         {[0, 1, 2, 3, 4, 5].map((m) => (
           <div
             key={m}
@@ -210,13 +204,13 @@ export function HeatmapCalendar() {
               height: '12px',
               borderRadius: '2px',
               backgroundColor: MOOD_COLORS[m],
+              border: m === 0 ? '1px solid #E2E8F0' : 'none',
             }}
           />
         ))}
-        <span style={{ fontSize: '0.7rem', color: '#64748B' }}>More</span>
+        <span style={{ fontSize: '0.7rem', color: '#94A3B8' }}>More</span>
       </div>
 
-      {/* Tooltip */}
       {tooltip?.show && (
         <div
           style={{
@@ -224,15 +218,16 @@ export function HeatmapCalendar() {
             left: tooltip.x,
             top: tooltip.y,
             transform: 'translate(-50%, -100%)',
-            background: '#252940',
-            border: '1px solid #2D3148',
+            background: '#FFFFFF',
+            border: '1px solid #E2E8F0',
             borderRadius: '8px',
             padding: '0.75rem',
             fontSize: '0.8rem',
             zIndex: 1000,
             pointerEvents: 'none',
             minWidth: '160px',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+            color: '#1E293B',
           }}
         >
           <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>
@@ -242,11 +237,11 @@ export function HeatmapCalendar() {
               month: 'short',
             })}
           </div>
-          <div style={{ color: MOOD_COLORS[tooltip.mood] }}>
+          <div style={{ color: '#059669', fontWeight: 500 }}>
             Mood: {tooltip.mood}/5
           </div>
           {tooltip.triggers.length > 0 && (
-            <div style={{ color: '#94A3B8', marginTop: '0.25rem' }}>
+            <div style={{ color: '#64748B', marginTop: '0.25rem' }}>
               {tooltip.triggers.map(getTriggerLabel).join(', ')}
             </div>
           )}
