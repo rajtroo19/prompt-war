@@ -39,12 +39,13 @@ export function Sidebar() {
           left: 0,
           right: 0,
           height: '60px',
-          background: '#0F1117',
-          borderBottom: '1px solid #2D3148',
+          background: '#FFFFFF',
+          borderBottom: '1px solid #E2E8F0',
           zIndex: 100,
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '0 1rem',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
         }}
       >
         <Link
@@ -54,7 +55,7 @@ export function Sidebar() {
             alignItems: 'center',
             gap: '0.5rem',
             textDecoration: 'none',
-            color: '#E2E8F0',
+            color: '#1E293B',
           }}
         >
           <span style={{ fontSize: '1.5rem' }}>🧘</span>
@@ -74,7 +75,7 @@ export function Sidebar() {
           style={{
             background: 'none',
             border: 'none',
-            color: '#E2E8F0',
+            color: '#1E293B',
             cursor: 'pointer',
             padding: '0.5rem',
           }}
@@ -90,7 +91,7 @@ export function Sidebar() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0,0,0,0.5)',
+            background: 'rgba(0,0,0,0.2)',
             zIndex: 199,
           }}
         />
@@ -102,8 +103,8 @@ export function Sidebar() {
         style={{
           width: '260px',
           minHeight: '100vh',
-          background: '#12141F',
-          borderRight: '1px solid #2D3148',
+          background: '#FFFFFF',
+          borderRight: '1px solid #E2E8F0',
           padding: '1.5rem 1rem',
           display: 'flex',
           flexDirection: 'column',
@@ -113,6 +114,7 @@ export function Sidebar() {
           overflowY: 'auto',
           transition: 'transform 0.3s ease',
           zIndex: 200,
+          boxShadow: '1px 0 3px rgba(0,0,0,0.03)',
         }}
       >
         {/* Logo */}
@@ -123,7 +125,7 @@ export function Sidebar() {
             alignItems: 'center',
             gap: '0.75rem',
             textDecoration: 'none',
-            color: '#E2E8F0',
+            color: '#1E293B',
             marginBottom: '2rem',
             padding: '0.5rem',
           }}
@@ -136,7 +138,7 @@ export function Sidebar() {
                 fontWeight: 800,
                 fontSize: '1.4rem',
                 lineHeight: 1.2,
-                background: 'linear-gradient(135deg, #6EE7B7, #4ade80)',
+                background: 'linear-gradient(135deg, #10B981, #059669)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}
@@ -146,7 +148,7 @@ export function Sidebar() {
             <p
               style={{
                 fontSize: '0.7rem',
-                color: '#64748B',
+                color: '#94A3B8',
                 letterSpacing: '0.05em',
                 marginTop: '2px',
               }}
@@ -181,14 +183,14 @@ export function Sidebar() {
         <div
           style={{
             padding: '1rem 0.5rem',
-            borderTop: '1px solid #2D3148',
+            borderTop: '1px solid #E2E8F0',
             marginTop: '1rem',
           }}
         >
           <p
             style={{
               fontSize: '0.75rem',
-              color: '#64748B',
+              color: '#94A3B8',
               textAlign: 'center',
               lineHeight: 1.5,
             }}

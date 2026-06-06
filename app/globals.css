@@ -1,27 +1,27 @@
 @import "tailwindcss";
 
-/* ─── Custom Properties (Design Tokens) ──────────────────── */
+/* ─── Custom Properties (Light Theme Design Tokens) ──────── */
 
 :root {
-  --bg-deep: #0F1117;
-  --bg-card: #1A1D2E;
-  --bg-card-hover: #222640;
-  --bg-elevated: #252940;
-  --primary: #6EE7B7;
-  --primary-dim: #4ade80;
-  --warning: #FCD34D;
-  --danger: #F87171;
-  --text-primary: #E2E8F0;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --border: #2D3148;
-  --border-glow: rgba(110, 231, 183, 0.2);
-  
-  --mood-1: #F87171;
-  --mood-2: #FB923C;
-  --mood-3: #FCD34D;
-  --mood-4: #86EFAC;
-  --mood-5: #6EE7B7;
+  --bg-deep: #F5F7FA;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F0F4F8;
+  --bg-elevated: #F0F4F8;
+  --primary: #10B981;
+  --primary-dim: #059669;
+  --warning: #D97706;
+  --danger: #EF4444;
+  --text-primary: #1E293B;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --border: #E2E8F0;
+  --border-glow: rgba(16, 185, 129, 0.25);
+
+  --mood-1: #EF4444;
+  --mood-2: #F97316;
+  --mood-3: #EAB308;
+  --mood-4: #22C55E;
+  --mood-5: #10B981;
 
   --radius: 12px;
   --radius-sm: 8px;
@@ -61,12 +61,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: #CBD5E1;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: #94A3B8;
 }
 
 /* ─── Card Styles ────────────────────────────────────────── */
@@ -77,20 +77,22 @@ body {
   border-radius: var(--radius);
   padding: 1.5rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .card:hover {
   border-color: var(--border-glow);
-  box-shadow: 0 0 20px rgba(110, 231, 183, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .card-gradient {
-  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 100%);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .card-gradient::before {
@@ -99,26 +101,26 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 1px;
+  height: 2px;
   background: linear-gradient(90deg, transparent, var(--primary), transparent);
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 /* ─── Glow Effects ───────────────────────────────────────── */
 
 .glow-primary {
-  box-shadow: 0 0 20px rgba(110, 231, 183, 0.15), 0 0 60px rgba(110, 231, 183, 0.05);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.1), 0 0 60px rgba(16, 185, 129, 0.05);
 }
 
 .glow-text {
-  text-shadow: 0 0 20px rgba(110, 231, 183, 0.3);
+  text-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
 }
 
 /* ─── Button Styles ──────────────────────────────────────── */
 
 .btn-primary {
-  background: linear-gradient(135deg, #6EE7B7, #4ade80);
-  color: #0F1117;
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: #FFFFFF;
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-sm);
@@ -130,7 +132,7 @@ body {
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(110, 231, 183, 0.3);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
 }
 
 .btn-primary:active {
@@ -145,7 +147,7 @@ body {
 }
 
 .btn-secondary {
-  background: var(--bg-elevated);
+  background: var(--bg-card);
   color: var(--text-primary);
   font-weight: 500;
   padding: 0.75rem 1.5rem;
@@ -164,7 +166,7 @@ body {
 /* ─── Form Styles ────────────────────────────────────────── */
 
 .input {
-  background: var(--bg-elevated);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
@@ -177,7 +179,7 @@ body {
 
 .input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.15);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
 }
 
 .input::placeholder {
@@ -185,7 +187,7 @@ body {
 }
 
 .textarea {
-  background: var(--bg-elevated);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
@@ -201,7 +203,7 @@ body {
 
 .textarea:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.15);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
 }
 
 /* ─── Tag / Pill Styles ──────────────────────────────────── */
@@ -215,7 +217,7 @@ body {
   font-size: 0.85rem;
   font-weight: 500;
   border: 1px solid var(--border);
-  background: var(--bg-elevated);
+  background: var(--bg-card);
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -225,12 +227,13 @@ body {
 .tag:hover {
   border-color: var(--primary);
   color: var(--primary);
+  background: #F0FDF4;
 }
 
 .tag.active {
-  background: rgba(110, 231, 183, 0.15);
+  background: #ECFDF5;
   border-color: var(--primary);
-  color: var(--primary);
+  color: #059669;
 }
 
 /* ─── Navigation ─────────────────────────────────────────── */
@@ -254,8 +257,9 @@ body {
 }
 
 .nav-item.active {
-  color: var(--primary);
-  background: rgba(110, 231, 183, 0.1);
+  color: #059669;
+  background: #ECFDF5;
+  font-weight: 600;
 }
 
 /* ─── Mood Emoji Selector ────────────────────────────────── */
@@ -268,7 +272,7 @@ body {
   padding: 1rem;
   border-radius: var(--radius);
   border: 2px solid var(--border);
-  background: var(--bg-elevated);
+  background: var(--bg-card);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 80px;
@@ -276,12 +280,12 @@ body {
 
 .mood-option:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 .mood-option.selected {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 .mood-option .emoji {
@@ -367,10 +371,10 @@ body {
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(110, 231, 183, 0.2);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
   }
   50% {
-    box-shadow: 0 0 40px rgba(110, 231, 183, 0.4);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.25);
   }
 }
 
@@ -386,7 +390,7 @@ body {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-card-hover) 50%, var(--bg-elevated) 75%);
+  background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
   border-radius: var(--radius-sm);
@@ -400,7 +404,7 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 1rem;
-  background: var(--bg-elevated);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   text-align: center;
@@ -409,11 +413,11 @@ body {
 
 .badge-card.unlocked {
   border-color: var(--primary);
-  background: rgba(110, 231, 183, 0.05);
+  background: #F0FDF4;
 }
 
 .badge-card.locked {
-  opacity: 0.4;
+  opacity: 0.45;
   filter: grayscale(1);
 }
 
@@ -428,10 +432,11 @@ body {
 }
 
 .chat-message.user {
-  background: linear-gradient(135deg, rgba(110, 231, 183, 0.15), rgba(74, 222, 128, 0.1));
-  border: 1px solid rgba(110, 231, 183, 0.2);
+  background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+  border: 1px solid #A7F3D0;
   margin-left: auto;
   border-bottom-right-radius: 4px;
+  color: #065F46;
 }
 
 .chat-message.assistant {
@@ -439,6 +444,7 @@ body {
   border: 1px solid var(--border);
   margin-right: auto;
   border-bottom-left-radius: 4px;
+  color: var(--text-primary);
 }
 
 /* ─── Typing Indicator ───────────────────────────────────── */
@@ -482,12 +488,12 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .mood-option:hover,
   .mood-option.selected {
     transform: none;
   }
-  
+
   .heatmap-cell:hover {
     transform: none;
   }
@@ -512,6 +518,6 @@ select:focus-visible {
 /* ─── Selection ──────────────────────────────────────────── */
 
 ::selection {
-  background: rgba(110, 231, 183, 0.3);
+  background: rgba(16, 185, 129, 0.2);
   color: var(--text-primary);
 }

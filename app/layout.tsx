@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0F1117',
+  themeColor: '#F5F7FA',
   width: 'device-width',
   initialScale: 1,
 };
@@ -50,7 +50,7 @@ export default function RootLayout({
     <html lang="en" className={`${bricolage.variable} ${instrumentSans.variable}`}>
       <body
         className={`${instrumentSans.className} antialiased`}
-        style={{ background: '#0F1117', color: '#E2E8F0' }}
+        style={{ background: '#F5F7FA', color: '#1E293B' }}
       >
         <div className="app-layout" style={{ display: 'flex', minHeight: '100vh' }}>
           <Sidebar />
