@@ -45,9 +45,10 @@ Key guidelines:
 
 // Free models with fallback chain
 const MODELS = [
-  'google/gemma-3-27b-it:free',
-  'meta-llama/llama-3.3-70b-instruct:free',
-  'mistralai/mistral-7b-instruct:free',
+  'google/gemini-2.0-flash-exp:free',
+  'meta-llama/llama-3.1-8b-instruct:free',
+  'microsoft/phi-3-mini-128k-instruct:free',
+  'google/gemma-2-9b-it:free',
 ];
 
 function sanitizeInput(input: string): string {
@@ -114,6 +115,8 @@ export async function POST(request: NextRequest) {
 
     messages.push({ role: 'user', content: cleanMessage });
 
+    let lastErrorMsg = '';
+
     // Try models in order until one works
     for (const model of MODELS) {
       try {
@@ -128,7 +131,7 @@ export async function POST(request: NextRequest) {
           body: JSON.stringify({
             model,
             messages,
-            max_tokens: 250,
+            max_tokens: 300,
             temperature: 0.7,
           }),
         });
@@ -137,10 +140,14 @@ export async function POST(request: NextRequest) {
           const data = await response.json();
           const reply = data.choices?.[0]?.message?.content ?? "I hear you, and I want you to know that your feelings are completely valid. Take a moment to breathe deeply — in for 4 counts, hold for 4, out for 4. You've got this. 💚";
           return NextResponse.json({ message: reply });
+        } else {
+           const errText = await response.text();
+           console.error(`Model ${model} failed: ${response.status} ${errText}`);
+           lastErrorMsg = `Status ${response.status}`;
         }
-        // If not ok, try next model
-      } catch {
-        // Try next model
+      } catch (e) {
+        console.error(`Fetch error for ${model}:`, e);
+        lastErrorMsg = String(e);
         continue;
       }
     }
@@ -148,7 +155,7 @@ export async function POST(request: NextRequest) {
     // All models failed
     return NextResponse.json({
       error: 'AI service temporarily unavailable',
-      message: "I'm having a brief moment — like a deep breath before answering. Try again in a moment! In the meantime, remember: you're doing amazing just by being here. 🌟",
+      message: `OpenRouter AI is currently unavailable or over capacity (${lastErrorMsg}). Please take a deep breath and try again in a few minutes! 🌟`,
     });
   } catch {
     return NextResponse.json({
