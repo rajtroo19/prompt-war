@@ -13,6 +13,7 @@ import {
   Menu,
   X,
   LogOut,
+  User,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -23,6 +24,7 @@ const navItems = [
   { href: '/insights', label: 'Insights', icon: BarChart3 },
   { href: '/exercises', label: 'Exercises', icon: Wind },
   { href: '/coach', label: 'AI Coach', icon: Bot },
+  { href: '/profile', label: 'Profile', icon: User },
 ];
 
 export function Sidebar() {
